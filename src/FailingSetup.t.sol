@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity >=0.8.0;
 
-contract FailingSetupTest {
+import "ds-test/test.sol";
+
+contract FailingSetupTest is DSTest {
     event Test(uint256 n);
 
     function setUp() public {
@@ -10,6 +12,6 @@ contract FailingSetupTest {
     }
 
     function testFailShouldBeMarkedAsFailedBecauseOfSetup() public {
-        require(false, "setup did not fail");
+        emit log("setup did not fail");
     }
 }
