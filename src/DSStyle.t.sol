@@ -3,12 +3,12 @@ pragma solidity >=0.8.0;
 
 import "ds-test/test.sol";
 
-contract DSStyle is DSTest {
+contract DSStyleTest is DSTest {
     function testFailingAssertions() public {
         emit log_string("assertionOne");
-        assertEq(1, 2);
+        assertEq(uint(1), uint(2));
         emit log_string("assertionTwo");
-        assertEq(3, 4);
+        assertEq(uint(3), uint(4));
         emit log_string("done");
     }
 }
