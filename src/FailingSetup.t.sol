@@ -9,7 +9,7 @@ contract FailingSetupTest {
         require(false, "setup failed predictably");
     }
 
-    function testShouldNeverBeCalled() public {
+    function testFailShouldBeMarkedAsFailedBecauseOfSetup() public {
         require(false, "setup did not fail");
     }
 }
