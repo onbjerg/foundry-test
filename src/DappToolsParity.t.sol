@@ -5,7 +5,6 @@ import "ds-test/test.sol";
 
 contract DSStyleTest is DSTest {
     function chainId() internal returns (uint256 id) {
-        uint256 id;
         assembly {
             id := chainid()
         }
@@ -20,7 +19,7 @@ contract DSStyleTest is DSTest {
     function testEnvironment() public {
         assertEq(chainId(), 99, "chain id is incorrect");
         assertEq(block.number, 0);
-        assertEq(blockhash(block.number), bytes(0), "blockhash s incorrect");
+        assertEq(blockhash(block.number), 0, "blockhash is incorrect");
         assertEq(block.coinbase, 0x0000000000000000000000000000000000000000, "coinbase is incorrect");
         assertEq(block.timestamp, 0, "timestamp is incorrect");
         assertEq(block.difficulty, 0, "difficulty is incorrect");
