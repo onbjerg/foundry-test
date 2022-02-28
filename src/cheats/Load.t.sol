@@ -10,10 +10,10 @@ contract Storage {
 contract LoadTest is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
     uint256 slot0 = 20;
-    Storage storage;
+    Storage store;
 
     function setUp() public {
-        storage = new Storage();
+        store = new Storage();
     }
 
     function testLoadOwnStorage() public {
@@ -22,7 +22,7 @@ contract LoadTest is DSTest {
     }
 
     function testLoadOtherStorage() public {
-        uint val = cheats.load(address(storage), bytes32(0));
+        uint val = cheats.load(address(store), bytes32(0));
         assertEq(val, 10, "load failed");
     }
 }
