@@ -2,6 +2,7 @@
 pragma solidity >=0.8.0;
 
 import "ds-test/test.sol";
+import "./Cheats.sol";
 
 contract FfiTest is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);

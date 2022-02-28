@@ -2,6 +2,7 @@
 pragma solidity >=0.8.0;
 
 import "ds-test/test.sol";
+import "./Cheats.sol";
 
 contract RollTest is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
@@ -22,12 +23,12 @@ contract RollTest is DSTest {
 
         cheats.roll(5);
         bytes32 hash = blockhash(5);
-        assertNe(blockhash(5), 0x0, "new block hash is incorrect");
+        assertTrue(blockhash(5) != 0x0, "new block hash is incorrect");
 
         cheats.roll(10);
-        assertNe(blockhash(5), blockhash(10), "block hash collision");
+        assertTrue(blockhash(5) != blockhash(10), "block hash collision");
 
-        hevm.roll(5);
+        cheats.roll(5);
         assertEq(blockhash(5), hash, "block 5 changed hash");
     }
 }

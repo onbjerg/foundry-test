@@ -2,6 +2,7 @@
 pragma solidity >=0.8.0;
 
 import "ds-test/test.sol";
+import "./Cheats.sol";
 
 contract Storage {
     uint256 slot0 = 10;
