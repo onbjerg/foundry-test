@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Unlicense
+pragma solidity >=0.8.0;
+
 interface Cheats {
     // Set block.timestamp (newTimestamp)
     function warp(uint256) external;
