@@ -7,7 +7,10 @@ import "./Cheats.sol";
 contract EtchTest is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
 
-    function testUnimplemented() public {
-        require(false, "unimplemented");
+    function testEtch() public {
+        address target = address(10);
+        bytes memory code = hex"1010";
+        cheats.etch(target, code);
+        assertEq(string(code), string(target.code));
     }
 }
