@@ -4,3 +4,4 @@ autodetect_solc = false
 remappings = [
   "ds-test/=lib/ds-test/src/"
 ]
+ffi = true
