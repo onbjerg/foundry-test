@@ -28,6 +28,71 @@ contract ConstructorVictim is Victim {
     }
 }
 
+contract NestedVictim {
+    Victim innerVictim;
+
+    constructor(Victim victim) {
+        innerVictim = victim;
+    }
+
+    function assertCallerAndOrigin(
+        address expectedSender,
+        string memory senderMessage,
+        address expectedOrigin,
+        string memory originMessage
+    ) public {
+        require(msg.sender == expectedSender, senderMessage);
+        require(tx.origin == expectedOrigin, originMessage);
+        innerVictim.assertCallerAndOrigin(
+            address(this),
+            "msg.sender was incorrectly set for nested victim",
+            expectedOrigin,
+            "tx.origin was incorrectly set for nested victim"
+        );
+    }
+}
+
+contract NestedPranker {
+    Cheats constant cheats = Cheats(
+        address(bytes20(uint160(uint256(keccak256('hevm cheat code')))))
+    );
+
+    address newSender;
+    address newOrigin;
+    address oldOrigin;
+
+    constructor(
+        address _newSender,
+        address _newOrigin
+    ) {
+        newSender = _newSender;
+        newOrigin = _newOrigin;
+        oldOrigin = tx.origin;
+    }
+
+    function incompletePrank() public {
+        cheats.startPrank(newSender, newOrigin);
+    }
+
+    function completePrank(NestedVictim victim) public {
+        victim.assertCallerAndOrigin(
+            newSender,
+            "msg.sender was not set in nested prank",
+            newOrigin,
+            "tx.origin was not set in nested prank"
+        );
+        cheats.stopPrank();
+
+        // Ensure we cleaned up correctly
+        victim.assertCallerAndOrigin(
+            address(this),
+            "msg.sender was not cleaned up in nested prank",
+            oldOrigin,
+            "tx.origin was not cleaned up in nested prank"
+        );
+    }
+}
+
 contract PrankTest is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
 
@@ -169,7 +234,37 @@ contract PrankTest is DSTest {
         );
     }
 
-    function testPrankComplex() public {
-        require(false, "unimplemented");
+    /// This test checks that depth is working correctly with respect
+    /// to the `startPrank` and `stopPrank` cheatcodes.
+    ///
+    /// The nested pranker calls `startPrank` but does not call
+    /// `stopPrank` at first.
+    ///
+    /// Then, we call our victim from the main test: this call
+    /// should NOT have altered `msg.sender` or `tx.origin`.
+    ///
+    /// Then, the nested pranker will complete their prank: this call
+    /// SHOULD have altered `msg.sender` and `tx.origin`.
+    ///
+    /// Each call to the victim calls yet another victim. The expected
+    /// behavior for this call is that `tx.origin` is altered when
+    /// the nested pranker calls, otherwise not. In both cases,
+    /// `msg.sender` should be the address of the first victim.
+    function testPrankComplex(address sender, address origin) public {
+        address oldOrigin = tx.origin;
+
+        NestedPranker pranker = new NestedPranker(sender, origin);
+        Victim innerVictim = new Victim();
+        NestedVictim victim = new NestedVictim(innerVictim);
+
+        pranker.incompletePrank();
+        victim.assertCallerAndOrigin(
+            address(this),
+            "msg.sender was altered at an incorrect depth",
+            oldOrigin,
+            "tx.origin was altered at an incorrect depth"
+        );
+
+        pranker.completePrank(victim);
     }
 }
