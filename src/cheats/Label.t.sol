@@ -7,7 +7,7 @@ import "./Cheats.sol";
 contract LabelTest is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
 
-    function testUnimplemented() public {
-        require(false, "unimplemented");
+    function testLabel() public {
+        cheats.label(address(1), "Sir Address the 1st");
     }
 }
