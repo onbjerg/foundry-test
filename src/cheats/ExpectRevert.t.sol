@@ -24,11 +24,22 @@ contract Reverter {
     function nestedRevert(Reverter inner, string memory message) public {
         inner.revertWithMessage(message);
     }
+
+    function callThenRevert(Dummy dummy, string memory message) public {
+        dummy.callMe();
+        require(false, message);
+    }
 }
 
 contract ConstructorReverter {
     constructor(string memory message) public {
         require(false, message);
+    }
+}
+
+contract Dummy {
+    function callMe() public returns (string memory) {
+        return "thanks for calling";
     }
 }
 
@@ -63,6 +74,13 @@ contract ExpectRevertTest is DSTest {
         Reverter inner = new Reverter();
         cheats.expectRevert("nested revert");
         reverter.nestedRevert(inner, "nested revert");
+    }
+
+    function testExpectRevertCallsThenReverts() public {
+        Reverter reverter = new Reverter();
+        Dummy dummy = new Dummy();
+        cheats.expectRevert("called a function and then reverted");
+        reverter.callThenRevert(dummy, "called a function and then reverted");
     }
 
     function testFailExpectRevertErrorDoesNotMatch() public {
