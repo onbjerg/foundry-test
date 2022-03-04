@@ -21,16 +21,12 @@ contract Mock {
 contract NestedMock {
     Mock private inner;
 
-    constructor(address _inner) {
-        inner = Mock(_inner);
+    constructor(Mock _inner) {
+        inner = _inner;
     }
 
     function sum() public returns (uint256) {
         return inner.numberA() + inner.numberB();
-    }
-
-    function hello() public returns (string memory) {
-        return "hi";
     }
 }
 
@@ -57,7 +53,7 @@ contract MockCallTest is DSTest {
 
     function testMockNested() public {
         Mock inner = new Mock();
-        NestedMock target = new NestedMock(address(inner));
+        NestedMock target = new NestedMock(inner);
 
         // pre-mock
         assertEq(target.sum(), 3);
