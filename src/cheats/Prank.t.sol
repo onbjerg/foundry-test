@@ -250,6 +250,47 @@ contract PrankTest is DSTest {
     /// behavior for this call is that `tx.origin` is altered when
     /// the nested pranker calls, otherwise not. In both cases,
     /// `msg.sender` should be the address of the first victim.
+    ///
+    /// Success case:
+    ///
+    /// ┌────┐          ┌───────┐     ┌──────┐ ┌──────┐               ┌────────────┐
+    /// │Test│          │Pranker│     │Cheats│ │Victim│               │Inner Victim│
+    /// └─┬──┘          └───┬───┘     └──┬───┘ └──┬───┘               └─────┬──────┘
+    ///   │                 │            │        │                         │       
+    ///   │incompletePrank()│            │        │                         │       
+    ///   │────────────────>│            │        │                         │       
+    ///   │                 │            │        │                         │       
+    ///   │                 │startPrank()│        │                         │       
+    ///   │                 │───────────>│        │                         │       
+    ///   │                 │            │        │                         │       
+    ///   │         should not be pranked│        │                         │       
+    ///   │──────────────────────────────────────>│                         │       
+    ///   │                 │            │        │                         │       
+    ///   │                 │            │        │  should not be pranked  │       
+    ///   │                 │            │        │────────────────────────>│       
+    ///   │                 │            │        │                         │       
+    ///   │ completePrank() │            │        │                         │       
+    ///   │────────────────>│            │        │                         │       
+    ///   │                 │            │        │                         │       
+    ///   │                 │  should be pranked  │                         │       
+    ///   │                 │────────────────────>│                         │       
+    ///   │                 │            │        │                         │       
+    ///   │                 │            │        │only tx.origin is pranked│       
+    ///   │                 │            │        │────────────────────────>│       
+    ///   │                 │            │        │                         │       
+    ///   │                 │stopPrank() │        │                         │       
+    ///   │                 │───────────>│        │                         │       
+    ///   │                 │            │        │                         │       
+    ///   │                 │should not be pranked│                         │       
+    ///   │                 │────────────────────>│                         │       
+    ///   │                 │            │        │                         │       
+    ///   │                 │            │        │  should not be pranked  │       
+    ///   │                 │            │        │────────────────────────>│       
+    /// ┌─┴──┐          ┌───┴───┐     ┌──┴───┐ ┌──┴───┐               ┌─────┴──────┐
+    /// │Test│          │Pranker│     │Cheats│ │Victim│               │Inner Victim│
+    /// └────┘          └───────┘     └──────┘ └──────┘               └────────────┘
+    /// If this behavior is incorrectly implemented then the victim
+    /// will be pranked the first time it is called.
     function testPrankComplex(address sender, address origin) public {
         address oldOrigin = tx.origin;
 
