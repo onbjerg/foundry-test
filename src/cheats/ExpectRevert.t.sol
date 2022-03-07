@@ -29,6 +29,10 @@ contract Reverter {
         dummy.callMe();
         require(false, message);
     }
+
+    function revertWithoutReason() public {
+        revert();
+    }
 }
 
 contract ConstructorReverter {
@@ -93,6 +97,12 @@ contract ExpectRevertTest is DSTest {
         Reverter reverter = new Reverter();
         cheats.expectRevert("does not revert, but we think it should");
         reverter.doNotRevert();
+    }
+
+    function testExpectRevertNoReason() public {
+        Reverter reverter = new Reverter();
+        cheats.expectRevert(bytes(""));
+        reverter.revertWithoutReason();
     }
 
     function testFailExpectRevertDangling() public {
