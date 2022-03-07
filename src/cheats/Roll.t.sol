@@ -19,7 +19,7 @@ contract RollTest is DSTest {
     }
 
     function testRollHash() public {
-        assertEq(blockhash(block.number), 0x0, "initial block hash is incorrect");
+        assertEq(blockhash(block.number), keccak256(abi.encodePacked(block.number)), "initial block hash is incorrect");
 
         cheats.roll(5);
         bytes32 hash = blockhash(5);
