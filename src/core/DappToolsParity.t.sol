@@ -19,7 +19,11 @@ contract DSStyleTest is DSTest {
     function testEnvironment() public {
         assertEq(chainId(), 99, "chain id is incorrect");
         assertEq(block.number, 0);
-        assertEq(blockhash(block.number), 0, "blockhash is incorrect");
+        assertEq(
+            blockhash(block.number),
+            keccak256(abi.encodePacked(block.number)),
+            "blockhash is incorrect"
+        );
         assertEq(block.coinbase, 0x0000000000000000000000000000000000000000, "coinbase is incorrect");
         assertEq(block.timestamp, 0, "timestamp is incorrect");
         assertEq(block.difficulty, 0, "difficulty is incorrect");
