@@ -25,7 +25,7 @@ contract LibraryConsumer {
     }
 }
 
-contract SetupConsistencyCheck is DSTest {
+contract LibraryLinkingTest is DSTest {
     LibraryConsumer consumer;
 
     function setUp() public {
