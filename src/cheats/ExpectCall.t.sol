@@ -5,15 +5,15 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract Contract {
-    function numberA() public returns (uint256) {
+    function numberA() public pure returns (uint256) {
         return 1;
     }
 
-    function numberB() public returns (uint256) {
+    function numberB() public pure returns (uint256) {
         return 2;
     }
 
-    function add(uint256 a, uint256 b) public returns (uint256) {
+    function add(uint256 a, uint256 b) public pure returns (uint256) {
         return a + b;
     }
 }
@@ -25,11 +25,11 @@ contract NestedContract {
         inner = _inner;
     }
 
-    function sum() public returns (uint256) {
+    function sum() public view returns (uint256) {
         return inner.numberA() + inner.numberB();
     }
 
-    function hello() public returns (string memory) {
+    function hello() public pure returns (string memory) {
         return "hi";
     }
 }

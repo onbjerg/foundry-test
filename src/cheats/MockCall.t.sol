@@ -5,15 +5,15 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract Mock {
-    function numberA() public returns (uint256) {
+    function numberA() public pure returns (uint256) {
         return 1;
     }
 
-    function numberB() public returns (uint256) {
+    function numberB() public pure returns (uint256) {
         return 2;
     }
 
-    function add(uint256 a, uint256 b) public returns (uint256) {
+    function add(uint256 a, uint256 b) public pure returns (uint256) {
         return a + b;
     }
 }
@@ -25,7 +25,7 @@ contract NestedMock {
         inner = _inner;
     }
 
-    function sum() public returns (uint256) {
+    function sum() public view returns (uint256) {
         return inner.numberA() + inner.numberB();
     }
 }

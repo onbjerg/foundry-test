@@ -7,42 +7,42 @@ import "./Cheats.sol";
 contract Reverter {
     error CustomError();
 
-    function revertWithMessage(string memory message) public {
+    function revertWithMessage(string memory message) public pure {
         require(false, message);
     }
 
-    function doNotRevert() public {}
+    function doNotRevert() public pure {}
 
-    function panic() public returns (uint256) {
+    function panic() public pure returns (uint256) {
         return uint256(100) - uint256(101);
     }
 
-    function revertWithCustomError() public {
+    function revertWithCustomError() public pure {
         revert CustomError();
     }
 
-    function nestedRevert(Reverter inner, string memory message) public {
+    function nestedRevert(Reverter inner, string memory message) public pure {
         inner.revertWithMessage(message);
     }
 
-    function callThenRevert(Dummy dummy, string memory message) public {
+    function callThenRevert(Dummy dummy, string memory message) public pure {
         dummy.callMe();
         require(false, message);
     }
 
-    function revertWithoutReason() public {
+    function revertWithoutReason() public pure {
         revert();
     }
 }
 
 contract ConstructorReverter {
-    constructor(string memory message) public {
+    constructor(string memory message) {
         require(false, message);
     }
 }
 
 contract Dummy {
-    function callMe() public returns (string memory) {
+    function callMe() public pure returns (string memory) {
         return "thanks for calling";
     }
 }

@@ -10,7 +10,7 @@ contract Victim {
         string memory senderMessage,
         address expectedOrigin,
         string memory originMessage
-    ) public {
+    ) public view {
         require(msg.sender == expectedSender, senderMessage);
         require(tx.origin == expectedOrigin, originMessage);
     }
@@ -22,7 +22,7 @@ contract ConstructorVictim is Victim {
         string memory senderMessage,
         address expectedOrigin,
         string memory originMessage
-    ) public {
+    ) {
         require(msg.sender == expectedSender, senderMessage);
         require(tx.origin == expectedOrigin, originMessage);
     }
@@ -40,7 +40,7 @@ contract NestedVictim {
         string memory senderMessage,
         address expectedOrigin,
         string memory originMessage
-    ) public {
+    ) public view {
         require(msg.sender == expectedSender, senderMessage);
         require(tx.origin == expectedOrigin, originMessage);
         innerVictim.assertCallerAndOrigin(
@@ -157,8 +157,6 @@ contract PrankTest is DSTest {
     }
 
     function testPrankConstructorOrigin(address sender, address origin) public {
-        address oldOrigin = tx.origin;
-
         // Perform the prank
         cheats.prank(sender, origin);
         ConstructorVictim victim = new ConstructorVictim(
@@ -207,8 +205,6 @@ contract PrankTest is DSTest {
     }
 
     function testPrankStartStopConstructor(address sender, address origin) public {
-        address oldOrigin = tx.origin;
-
         // Perform the prank
         cheats.startPrank(sender, origin);
         ConstructorVictim victim = new ConstructorVictim(

@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 import "ds-test/test.sol";
 
 contract DebugLogsTest is DSTest {
-    constructor() public {
+    constructor() {
         emit log_uint(0);
     }
 

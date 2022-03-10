@@ -38,14 +38,15 @@ contract RecursiveCall {
         emit CreatedChild(depth + 1);
 
         uint256 childDepth = child.recurseCreate(neededDepth, depth + 1);
+        emit ChildDepth(childDepth);
         emit Depth(depth);
 
         return depth;
     }
 
-    function someCall() public {}
+    function someCall() public pure {}
 
-    function negativeNum() public returns (int256) {
+    function negativeNum() public pure returns (int256) {
         return -1000000000;
     }
 }

@@ -2,22 +2,22 @@
 pragma solidity >=0.8.0;
 
 contract HardhatLogsTest {
-    constructor() public {
+    constructor() {
         console.log("constructor");
     }
 
-    function testInts() public {
+    function testInts() public view {
         console.log(0);
         console.log(1);
 				console.log(2);
 				console.log(3);
     }
 
-    function testStrings() public {
+    function testStrings() public view {
         console.log("testStrings");
     }
 
-    function testMisc() public {
+    function testMisc() public view {
         console.log("testMisc", address(1));
 				console.log("testMisc", 42);
     }

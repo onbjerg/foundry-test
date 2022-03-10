@@ -4,7 +4,7 @@ pragma solidity >=0.8.0;
 import "ds-test/test.sol";
 
 contract FuzzTest is DSTest {
-  constructor() public {
+  constructor() {
     emit log("constructor");
   }
 

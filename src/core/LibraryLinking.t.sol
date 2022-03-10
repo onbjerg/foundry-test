@@ -4,23 +4,23 @@ pragma solidity >=0.8.0;
 import "ds-test/test.sol";
 
 library Lib {
-    function plus100(uint256 a) public view returns (uint256) {
+    function plus100(uint256 a) public pure returns (uint256) {
         return a + 100;
     }
 }
 
 library NestedLib {
-    function nestedPlus100Plus1(uint256 a) public view returns (uint256) {
+    function nestedPlus100Plus1(uint256 a) public pure returns (uint256) {
         return Lib.plus100(a) + 1;
     }
 }
 
 contract LibraryConsumer {
-    function consume(uint256 a) public view returns (uint256) {
+    function consume(uint256 a) public pure returns (uint256) {
         return Lib.plus100(a);
     }
 
-    function consumeNested(uint256 a) public view returns (uint256) {
+    function consumeNested(uint256 a) public pure returns (uint256) {
         return NestedLib.nestedPlus100Plus1(a);
     }
 }

@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 contract RevertingTest {
-    function testFailRevert() public {
+    function testFailRevert() public pure {
         require(false, "should revert here");
     }
 }
