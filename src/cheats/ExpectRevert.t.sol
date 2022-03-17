@@ -103,6 +103,8 @@ contract ExpectRevertTest is DSTest {
         Reverter reverter = new Reverter();
         cheats.expectRevert(bytes(""));
         reverter.revertWithoutReason();
+        cheats.expectRevert();
+        reverter.revertWithoutReason();
     }
 
     function testFailExpectRevertDangling() public {
